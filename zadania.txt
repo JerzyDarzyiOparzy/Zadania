@@ -70,13 +70,22 @@ CREATE TABLE izba (adres_budynku varchar(100), nazwa_izby varchar(100), primary 
 
 	
 ALTER TABLE izba ADD COLUMN kolor_izby varchar(30) DEFAULT 'czarny' AFTER metraz;	
+
 	
 
 3.
  
 	
 INSERT INTO izba VALUES ('wikingowa 3', 'spizarnia', 100, default, 1);
+
+
+Zad 4.
+
+1.
+	CREATE TABLE przetwory (id_przetworu int PRIMARY KEY AUTO_INCREMENT NOT NULL, rok_produkcji int(4) DEFAULT '1654', id_wykonawcy int, FOREIGN KEY (id_wykonawcy) REFERENCES postac(id_postaci), zawartosc varchar(150), dodatek varchar(150) DEFAULT 'papryczka chilli', id_konsumenta int, FOREIGN KEY (id_konsumenta) REFERENCES postac(id_postaci));
 	
+2.
+	INSERT INTO przetwory VALUES (default, default, 1, 'bigos', default, 3);	
 
 
 	

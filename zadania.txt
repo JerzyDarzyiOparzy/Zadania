@@ -55,5 +55,28 @@ INSERT INTO walizka VALUES (default, 20, 'czerwony', 1);
 
 INSERT INTO walizka VALUES (default, 15, 'teczowy', 3);
 
+Zad 3.
+
+
+
+1.
+
+	
+CREATE TABLE izba (adres_budynku varchar(100), nazwa_izby varchar(100), primary key(adres_budynku, nazwa_izby), metraz int UNSIGNED, wlasciciel int, FOREIGN KEY (wlasciciel) REFERENCES postac(id_postaci) ON DELETE SET NULL);
+
+	
+
+2.
+
+	
+ALTER TABLE izba ADD COLUMN kolor_izby varchar(30) DEFAULT 'czarny' AFTER metraz;	
+	
+
+3.
+ 
+	
+INSERT INTO izba VALUES ('wikingowa 3', 'spizarnia', 100, default, 1);
+	
+
 
 	

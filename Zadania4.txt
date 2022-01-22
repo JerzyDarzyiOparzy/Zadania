@@ -1,0 +1,99 @@
+Zadanie 1
+
+a)
+
+use hincm
+SELECT avg(waga) FROM kreatura WHERE rodzaj = 'wiking';
+
+b)
+
+SELECT rodzaj, avg(waga), count(nazwa) FROM kreatura GROUP BY rodzaj;
+
+c)
+
+SELECT rodzaj, avg(YEAR(CURDATE())-YEAR(dataUr)) AS 'sredni wiek' FROM kreatura GROUP BY rodzaj;
+
+Zadanie 2
+
+a)
+
+use wikingowie
+SELECT rodzaj, sum(waga) FROM zasob GROUP BY rodzaj;
+
+b)
+
+SELECT nazwa, avg(waga) FROM zasob WHERE ilosc>=4 GROUP BY nazwa HAVING sum(waga)>10;
+
+c)
+
+SELECT count(DISTINCT(nazwa)), rodzaj FROM zasob GROUP BY rodzaj HAVING sum(ilosc)>1;
+
+Zadanie 3
+
+a)
+
+SELECT kreatura.nazwa, sum(ekwipunek.ilosc) 
+FROM kreatura, ekwipunek 
+WHERE kreatura.idKreatury=ekwipunek.idKreatury 
+GROUP BY kreatura.idKreatury; 
+
+b)
+
+SELECT k.nazwa, z.nazwa
+FROM kreatura k
+INNER JOIN ekwipunek e
+ON k.idKreatury=e.idKreatury
+INNER JOIN zasob z 
+ON e.idZasobu=z.idZasobu;
+
+c)
+
+SELECT k.idKreatury, k.nazwa, e.idKreatury, e.idZasobu FROM kreatura k
+LEFT JOIN ekwipunek e
+ON k.idKreatury=e.idKreatury
+WHERE e.idKreatury IS NULL;
+
+Zadanie 4
+
+a)
+
+SELECT k.nazwa, z.nazwa FROM kreatura k
+INNER JOIN ekwipunek e
+ON k.idKreatury=e.idKreatury
+INNER JOIN zasob z 
+ON e.idZasobu=z.idZasobu WHERE k.dataUr BETWEEN '1670-01-01' AND '1679-12-31';
+
+b)
+
+SELECT k.nazwa FROM kreatura k
+INNER JOIN ekwipunek e
+ON k.idKreatury=e.idKreatury
+INNER JOIN zasob z 
+ON e.idZasobu=z.idZasobu WHERE z.rodzaj='jedzenie' ORDER BY k.dataUr ASC;
+
+c)
+
+SELECT CONCAT (T2.nazwa, " - ", T1.nazwa)
+AS "postac1 - postac2"
+FROM kreatura T1, kreatura T2
+WHERE T1.idKreatury-T2.idKreatury=5;
+
+Zadanie 5
+
+a)
+
+SELECT k.rodzaj, AVG(e.ilosc * z.waga) FROM kreatura k
+INNER JOIN ekwipunek e ON k.idKreatury=e.idKreatury
+INNER JOIN zasob z ON e.idZasobu=z.idZasobu
+WHERE k.rodzaj NOT IN ('malpa','waz')
+GROUP BY k.rodzaj HAVING SUM(e.ilosc)<30; 
+
+b)
+
+SELECT nazwa, dataUr, rodzaj
+FROM kreatura 
+WHERE dataUr IN (SELECT MAX(dataUr) FROM kreatura GROUP BY rodzaj)
+UNION
+SELECT nazwa, dataUr, rodzaj
+FROM kreatura 
+WHERE dataUr IN (SELECT MIN(dataUr) FROM kreatura GROUP BY rodzaj);

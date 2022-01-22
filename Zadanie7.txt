@@ -1,0 +1,55 @@
+Zadania-część 2
+1.
+
+SELECT p.imie, p.nazwisko, d.nazwa FROM pracownik p
+INNER JOIN dzial d ON p.dzial=d.id_dzialu;
+
+2.
+
+SELECT t.nazwa_towaru, t.kategoria, sm.ilosc FROM towar t
+INNER JOIN stan_magazynowy sm ON t.id_towaru=sm.towar ORDER BY sm.ilosc DESC;
+
+3.
+
+SELECT id_zamowienia FROM zamowienie WHERE status_zamowienia=6;
+
+4.
+
+SELECT k.id_klienta FROM klient k
+INNER JOIN adres_klienta ak ON (k.id_klienta=ak.klient)
+WHERE miejscowosc="Olsztyn";
+
+5.
+
+SELECT distinct(jm.nazwa) FROM jednostka_miary jm
+LEFT JOIN stan_magazynowy sm ON (jm.id_jednostki=sm.jm) WHERE sm.jm IS NULL;
+
+6.
+
+SELECT z.numer_zamowienia, t.nazwa_towaru, pz.ilosc, pz.cena FROM zamowienie z
+INNER JOIN pozycja_zamowienia pz ON z.id_zamowienia=pz.zamowienie
+INNER JOIN towar t ON pz.towar=t.id_towaru WHERE (YEAR(z.data_zamowienia)=2018);
+
+7.
+
+CREATE TABLE hincm.towary_full_info SELECT t.nazwa_towaru, t.cena_zakupu, k.nazwa_kategori, sm.ilosc, jm.nazwa
+FROM towar t
+INNER JOIN kategoria k ON t.kategoria=k.id_kategori
+INNER JOIN stan_magazynowy sm ON t.id_towaru=sm.towar
+INNER JOIN jednostka_miary jm ON sm.jm=jm.id_jednostki;
+
+8.
+
+SELECT pz.id_pozycji FROM zamowienie z
+INNER JOIN pozycja_zamowienia pz ON (z.id_zamowienia=pz.zamowienie)
+ORDER BY z.data_zamowienia ASC LIMIT 5;
+
+9.
+
+SELECT id_zamowienia FROM zamowienie
+WHERE status_zamowienia NOT IN (5);
+
+10.
+
+SELECT id_adresu FROM adres_klienta
+WHERE kod NOT LIKE "__-___";

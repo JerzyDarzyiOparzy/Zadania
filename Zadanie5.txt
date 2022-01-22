@@ -1,0 +1,85 @@
+ZADANIE 1
+
+A)
+
+CREATE TABLE hincm.kreatura_kopia SELECT * FROM kreatura;
+CREATE TABLE hincm.uczestnicy_kopia SELECT * FROM uczestnicy;
+CREATE TABLE hincm.etapy_wyprawy_kopia SELECT * FROM etapy_wyprawy;
+CREATE TABLE hincm.sektor_kopia SELECT * FROM sektor;
+CREATE TABLE hincm.wyprawa_kopia SELECT * FROM wyprawa;
+
+B)
+
+SELECT idKreatury, k.nazwa
+FROM kreatura k
+WHERE idKreatury NOT IN (select id_uczestnika FROM uczestnicy);
+
+C)
+
+SELECT w.nazwa, SUM(e.ilosc)
+FROM wyprawa w
+INNER JOIN uczestnicy u ON w.id_wyprawy=u.id_wyprawy
+INNER JOIN ekwipunek e ON u.id_uczestnika=e.idKreatury
+GROUP BY w.id_wyprawy;
+
+ZADANIE 2
+
+A)
+
+SELECT w.nazwa, COUNT(u.id_uczestnika), GROUP_CONCAT(k.nazwa SEPARATOR " - ")
+AS 'Uczestnicy'
+FROM wyprawa w
+INNER JOIN uczestnicy u ON w.id_wyprawy=u.id_wyprawy
+INNER JOIN kreatura k ON u.id_uczestnika=k.idKreatury
+GROUP BY w.id_wyprawy;
+
+B)
+
+SELECT ew.idEtapu, s.nazwa, k.nazwa, w.data_rozpoczecia, ew.kolejnosc FROM kreatura k
+INNER JOIN wyprawa w ON k.idKreatury=w.kierownik
+INNER JOIN etapy_wyprawy ew ON w.id_wyprawy=ew.idWyprawy
+INNER JOIN sektor s ON s.id_sektora=ew.sektor
+ORDER BY w.data_rozpoczecia, ew.kolejnosc;
+
+ZADANIE 3
+
+A)
+
+SELECT s.nazwa, IF(COUNT(ew.sektor)>0, count(ew.sektor), '0') FROM sektor s
+LEFT JOIN etapy_wyprawy ew ON s.id_sektora=ew.sektor
+GROUP BY s.nazwa;
+
+B)
+
+SELECT k.nazwa, IF(COUNT(u.id_wyprawy)>0, 'bral udzial w wyprawie', 'nie bral udzialu w wyprawie') FROM kreatura k
+LEFT JOIN uczestnicy u ON k.idKreatury=u.id_uczestnika
+GROUP BY k.nazwa;
+
+ZADANIE 4
+
+A)
+
+SELECT w.nazwa, SUM(LENGTH(ew.dziennik)) suma
+FROM wyprawa w
+INNER JOIN etapy_wyprawy ew ON w.id_wyprawy=ew.idWyprawy
+GROUP BY w.nazwa
+HAVING suma<400;
+
+
+B)
+
+SELECT w.nazwa, SUM(z.waga*e.ilosc)/COUNT(DISTINCT u.id_uczestnika) FROM wyprawa w
+LEFT JOIN uczestnicy u ON w.id_wyprawy=u.id_wyprawy
+LEFT JOIN ekwipunek e ON u.id_uczestnika=e.idKreatury
+LEFT JOIN zasob z ON e.idZasobu=z.idZasobu
+GROUP BY w.nazwa;
+
+ZADANIE 5
+
+A)
+
+SELECT k.nazwa, abs(DATEDIFF(k.dataUr, w.data_rozpoczecia)) Dzien FROM kreatura k
+INNER JOIN uczestnicy u ON k.idKreatury=u.id_uczestnika
+INNER JOIN wyprawa w ON u.id_wyprawy=w.id_wyprawy
+INNER JOIN etapy_wyprawy ew ON w.id_wyprawy=ew.idWyprawy
+WHERE ew.sektor='7';

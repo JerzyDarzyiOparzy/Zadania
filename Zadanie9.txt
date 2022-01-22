@@ -1,0 +1,59 @@
+1
+
+SELECT d.nazwa, min(p.pensja), max(p.pensja), avg(p.pensja)
+FROM dzial d
+INNER JOIN pracownik p ON d.id_dzialu=p.dzial
+GROUP BY d.id_dzialu;
+
+2
+
+SELECT k.pelna_nazwa, SUM(pz.ilosc*pz.cena) FROM klient k
+INNER JOIN zamowienie z ON k.id_klienta=z.klient
+INNER JOIN pozycja_zamowienia pz ON z.id_zamowienia=pz.zamowienie
+GROUP BY z.klient ORDER BY SUM(pz.ilosc*pz.cena) DESC LIMIT 10;
+
+3
+
+SELECT YEAR(z.data_zamowienia), SUM(pz.ilosc*pz.cena) FROM zamowienie z
+INNER JOIN pozycja_zamowienia pz ON z.id_zamowienia=pz.zamowienie
+GROUP BY YEAR(z.data_zamowienia) ORDER BY SUM(pz.ilosc*pz.cena) DESC;
+
+4
+
+SELECT SUM(pz.ilosc*pz.cena) FROM pozycja_zamowienia pz
+INNER JOIN zamowienie z ON pz.zamowienie=z.id_zamowienia
+INNER JOIN status_zamowienia sz ON z.status_zamowienia=sz.id_statusu_zamowienia
+WHERE sz.id_statusu_zamowienia="6";
+
+5
+
+SELECT COUNT(DISTINCT z.id_zamowienia), SUM(DISTINCT z.id_zamowienia) FROM zamowienie z
+INNER JOIN adres_klienta ak ON z.klient=ak.klient
+WHERE ak.typ_adresu="1";
+
+6
+
+SELECT SUM(pz.ilosc*pz.cena) FROM pozycja_zamowienia pz
+INNER JOIN zamowienie z ON pz.zamowienie=z.id_zamowienia
+WHERE z.status_zamowienia="5";
+
+7
+
+SELECT SUM((pz.ilosc*pz.cena)-cena_zakupu) FROM zamowienie z
+INNER JOIN pozycja_zamowienia pz ON z.id_zamowienia=pz.zamowienie
+INNER JOIN towar t ON pz.towar=t.id_towaru
+GROUP BY YEAR(z.data_zamowienia);
+
+8
+
+SELECT k.nazwa_kategori, SUM(t.cena_zakupu) FROM towar t
+INNER JOIN kategoria k ON t.kategoria=k.id_kategori
+GROUP BY k.id_kategori;
+
+9
+
+SELECT MONTHNAME(STR_TO_DATE(data_urodzenia, '%m')), COUNT(id_pracownika) FROM pracownik
+GROUP BY MONTH(data_urodzenia) ORDER BY MONTH(data_urodzenia); #???
+
+
+

@@ -1,0 +1,52 @@
+Zadania-część 1
+1.
+
+SELECT nazwisko FROM pracownik ORDER BY nazwisko;
+
+2.
+
+SELECT imie, nazwisko, pensja FROM pracownik WHERE YEAR(data_urodzenia)>1979;
+
+3.
+
+SELECT * FROM pracownik WHERE pensja BETWEEN 3500 AND 5000;
+
+4.
+
+SELECT towar FROM stan_magazynowy WHERE ilosc>10;
+
+5.
+
+SELECT nazwa_towaru FROM towar WHERE nazwa_towaru LIKE "A%" OR nazwa_towaru LIKE "B%" OR nazwa_towaru LIKE "C%";
+
+6.
+
+SELECT DISTINCT(id_klienta) FROM klient;
+
+7.
+
+SELECT id_zamowienia FROM zamowienie ORDER BY data_zamowienia DESC LIMIT 10;
+
+8.
+
+SELECT id_pracownika FROM pracownik ORDER BY pensja LIMIT 5;
+
+9.
+
+SELECT id_towaru, nazwa_towaru FROM towar WHERE nazwa_towaru NOT LIKE "%a%" ORDER BY cena_zakupu DESC;
+
+10.
+
+SELECT t.id_towaru,jm.nazwa,t.nazwa_towaru,t.cena_zakupu FROM towar t
+INNER JOIN stan_magazynowy sm ON (t.id_towaru=sm.towar)
+INNER JOIN jednostka_miary jm ON (sm.jm=jm.id_jednostki)
+WHERE jm.nazwa="szt" GROUP BY t.id_towaru ORDER BY t.nazwa_towaru, t.cena_zakupu DESC;
+
+11.
+
+CREATE TABLE hincm.towary_powyzej_100 SELECT * FROM towar WHERE cena_zakupu>=100;
+
+12.
+
+CREATE TABLE hincm.pracownik_50_plus LIKE pracownik;
+INSERT INTO hincm.pracownik_50_plus SELECT * FROM pracownik WHERE (YEAR(CURDATE())-YEAR(data_urodzenia))>=50;
